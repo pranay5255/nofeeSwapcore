@@ -70,6 +70,7 @@ uint16 constant _currentToOriginCalldata_ = 1213;
 uint16 constant _currentToOvershootCalldata_ = 1240;
 uint16 constant _targetToOvershootCalldata_ = 1267;
 uint16 constant _originToOvershootCalldata_ = 1294;
+uint16 constant _endOfIntervalCalldata_ = 1321;
 
 uint16 constant _accruedParamsCalldata_ = 1321;
 uint16 constant _accrued0Calldata_ = 1321;
@@ -109,7 +110,6 @@ uint16 constant _poolGrowthPortionCalldata_ = 1908;
 uint16 constant _maxPoolGrowthPortionCalldata_ = 1914;
 uint16 constant _protocolGrowthPortionCalldata_ = 1920;
 uint16 constant _pendingKernelLengthCalldata_ = 1926;
-
 uint16 constant _endOfStaticParamsCalldata_ = 1928;
 
 uint16 constant _modifyPositionInputCalldata_ = 120;
