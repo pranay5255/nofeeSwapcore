@@ -170,6 +170,7 @@ import {X127} from "./utilities/X127.sol";
 import {KernelCompact} from "./utilities/KernelCompact.sol";
 import {Kernel} from "./utilities/Kernel.sol";
 import {
+  AdminCannotBeAddressZero,
   OnlyByProtocol,
   OnlyByPoolOwner,
   InvalidGrowthPortion,
@@ -655,6 +656,10 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
   ) external override {
     address owner = getProtocolOwner(readProtocol());
     require(msg.sender == owner, OnlyByProtocol(msg.sender, owner));
+    require(
+      getProtocolOwner(protocol) != address(0),
+      AdminCannotBeAddressZero()
+    );
 
     (
       X47 maxPoolGrowthPortion,
@@ -701,6 +706,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     uint256 slot = getPoolOwnerSlot(poolId);
     address oldOwner = readPoolOwner(slot);
     require(msg.sender == oldOwner, OnlyByPoolOwner(msg.sender, oldOwner));
+    require(newOwner != address(0), AdminCannotBeAddressZero());
 
     // The new pool owner is written on storage.
     writePoolOwner(slot, newOwner);
