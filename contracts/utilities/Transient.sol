@@ -338,17 +338,20 @@ function readReserve() view returns (
   // The least significant 160 bits host 'token'.
   token = address(uint160(content & type(uint160).max));
 
-  // The most significant 96 bits are nonzero if and only if
-  // 'multiToken == true'.
-  multiToken = (content >> 160) > 0;
+  // Native balance should not be read from transient storage.
+  if (token != address(0)) {
+    // The most significant 96 bits are nonzero if and only if
+    // 'multiToken == true'.
+    multiToken = (content >> 160) > 0;
 
-  if (multiToken) {
-    // 'tokenId' is read from the dedicated space in transient storage.
-    tokenId = readUint256Transient(tokenIdSlot);
+    if (multiToken) {
+      // 'tokenId' is read from the dedicated space in transient storage.
+      tokenId = readUint256Transient(tokenIdSlot);
+    }
+
+    // 'reserve' value is read from the dedicated space in transient storage.
+    reserve = readUint256Transient(reserveSlot);
   }
-
-  // 'reserve' value is read from the dedicated space in transient storage.
-  reserve = readUint256Transient(reserveSlot);
 }
 
 /// @notice This function populates the content of 'token' slot.

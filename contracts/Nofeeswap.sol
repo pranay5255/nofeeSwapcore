@@ -93,6 +93,7 @@ import {
   emitSwapEvent
 } from "./utilities/Events.sol";
 import {
+  MsgValueIsNonZero,
   InsufficientBalance,
   BalanceOverflow,
   TagsOutOfOrder,
@@ -462,7 +463,9 @@ contract Nofeeswap is INofeeswap, StorageAccess, TransientAccess {
     address token
   ) external override {
     writeReserveToken(token, false);
-    writeReserveValue(token.balanceOfSelf());
+    if (token != address(0)) {
+      writeReserveValue(token.balanceOfSelf());
+    }
   }
 
   /// @inheritdoc INofeeswap
@@ -481,14 +484,19 @@ contract Nofeeswap is INofeeswap, StorageAccess, TransientAccess {
   ) {
     isProtocolUnlocked();
 
-    if (msg.value == 0) {
-      (
-        address token,
-        uint256 tokenId,
-        uint256 syncedBalance,
-        bool multiToken
-      ) = readReserve();
+    (
+      address token,
+      uint256 tokenId,
+      uint256 syncedBalance,
+      bool multiToken
+    ) = readReserve();
 
+    Tag tag;
+    if (token == address(0)) {
+      tag = native;
+      paid = msg.value;
+    } else {
+      require(msg.value == 0, MsgValueIsNonZero(msg.value));
       (Tag tag, uint256 currentBalance) = multiToken ? (
         token.tag(tokenId),
         token.balanceOfSelf(tokenId)
@@ -496,20 +504,11 @@ contract Nofeeswap is INofeeswap, StorageAccess, TransientAccess {
         token.tag(),
         token.balanceOfSelf()
       );
-
       paid = currentBalance - syncedBalance;
-
-      unchecked {
-        updateTransientBalance(msg.sender, tag, 0 - int256(paid));
-      }
-
       writeReserveValue(currentBalance);
-    } else {
-      unchecked {
-        paid = msg.value;
-        updateTransientBalance(msg.sender, native, 0 - paid.toInt256());
-      }
     }
+
+    updateTransientBalance(msg.sender, tag, 0 - paid.toInt256());
   }
 
   /// @inheritdoc INofeeswap

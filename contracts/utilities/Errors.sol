@@ -283,3 +283,6 @@ error HookDataTooLong(uint256 hookDataByteCount);
 
 /// @notice Thrown when attempting to transfer ownership to address 0.
 error AdminCannotBeAddressZero();
+
+/// @notice Thrown when attempting to settle a tag with nonzero 'msg.value'.
+error MsgValueIsNonZero(uint256 msgValue);
