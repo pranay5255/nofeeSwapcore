@@ -423,6 +423,14 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     updateTransientBalance(msg.sender, getTag0(), amount0);
     updateTransientBalance(msg.sender, getTag1(), amount1);
 
+    // Total supply of this LP position (see ERC6909 specifications).
+    incrementBalance(
+      address(this),
+      // The two bounds are switched in order to refer to a non-existing tag. 
+      getPoolId().tag(getLogPriceMax(), getLogPriceMin()),
+      uint256(getShares())
+    );
+
     // The lock is cleared to open the pool for other actions.
     unlockPool();
 
