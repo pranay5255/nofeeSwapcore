@@ -497,7 +497,8 @@ contract Nofeeswap is INofeeswap, StorageAccess, TransientAccess {
       paid = msg.value;
     } else {
       require(msg.value == 0, MsgValueIsNonZero(msg.value));
-      (Tag tag, uint256 currentBalance) = multiToken ? (
+      uint256 currentBalance;
+      (tag, currentBalance) = multiToken ? (
         token.tag(tokenId),
         token.balanceOfSelf(tokenId)
       ) : (
