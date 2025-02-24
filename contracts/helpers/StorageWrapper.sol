@@ -201,6 +201,27 @@ contract StorageWrapper {
     return readStorage(storageSlot);
   }
 
+  function _totalSupplySlot() public returns (
+    uint256 storageSlot
+  ) {
+    return totalSupplySlot;
+  }
+
+  function _updateTotalSupply(
+    uint256 storageSlot,
+    uint256 totalSupply,
+    uint256 poolId,
+    X59 qMin,
+    X59 qMax,
+    int256 shares
+  ) public returns (
+    uint256 newTotalSupply
+  ) {
+    writeStorage(storageSlot, totalSupply);
+    updateTotalSupply(poolId, qMin, qMax, shares);
+    return readStorage(storageSlot);
+  }
+
   function _isOperatorSlot() public returns (
     uint256 storageSlot
   ) {

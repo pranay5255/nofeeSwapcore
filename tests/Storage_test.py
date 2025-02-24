@@ -216,6 +216,33 @@ def test_writeDoubleBalance(wrapper, storageSlot, amount0, amount1, request, wor
     content = tx.return_value
     assert content == (amount1 << 128) + amount0
 
+def test_totalSupplySlot(wrapper, request, worker_id):
+    logTest(request, worker_id)
+    
+    # Check if the hash is calculated correctly.
+    tx = wrapper._totalSupplySlot()
+    totalSupplySlot = tx.return_value
+    assert totalSupplySlot == (keccak256('totalSupply') - 1) % (1 << 128)
+
+@pytest.mark.parametrize('currentTotalSupply', [balance0, balance1, balance2, balance4])
+@pytest.mark.parametrize('shares', [balance0, balance1, balance2, balance4, balance5, balance6, balance7, balance8])
+@pytest.mark.parametrize('qMin', [logPrice0, logPrice1, logPrice2, logPrice3, logPrice4])
+@pytest.mark.parametrize('qMax', [logPrice0, logPrice1, logPrice2, logPrice3, logPrice4])
+@pytest.mark.parametrize('poolId', [value0, value1, value2, value3, value4])
+def test_updateTotalSupply(wrapper, currentTotalSupply, shares, qMin, qMax, poolId, request, worker_id):
+    logTest(request, worker_id)
+    
+    # Check if total supply is incremented correctly.
+    storageSlot = keccakPacked(['uint256', 'uint64', 'uint64', 'uint128'], [poolId, qMin, qMax, (keccak256('totalSupply') - 1) % (1 << 128)])
+    newTotalSupply = currentTotalSupply + shares
+    if 0 <= newTotalSupply and newTotalSupply < 2 ** 128:
+        tx = wrapper._updateTotalSupply(storageSlot, currentTotalSupply, poolId, qMin, qMax, shares)
+        result = tx.return_value
+        assert result == newTotalSupply
+    else:
+        with brownie.reverts('BalanceOverflow: ' + str(twosComplement(newTotalSupply))):
+            tx = wrapper._updateTotalSupply(storageSlot, currentTotalSupply, poolId, qMin, qMax, shares)
+
 def test_isOperatorSlot(wrapper, request, worker_id):
     logTest(request, worker_id)
     

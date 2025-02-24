@@ -92,7 +92,8 @@ import {
   incrementBalance,
   getKernelLength,
   readStaticParamsAndKernel,
-  getStaticParamsStorageAddress
+  getStaticParamsStorageAddress,
+  updateTotalSupply
 } from "./utilities/Storage.sol";
 import {
   calculateMaxIntegrals,
@@ -424,12 +425,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     updateTransientBalance(msg.sender, getTag1(), amount1);
 
     // Total supply of this LP position (see ERC6909 specifications).
-    incrementBalance(
-      address(this),
-      // The two bounds are switched in order to refer to a non-existing tag. 
-      getPoolId().tag(getLogPriceMax(), getLogPriceMin()),
-      uint256(getShares())
-    );
+    updateTotalSupply(getPoolId(), qMin, qMax, getShares());
 
     // The lock is cleared to open the pool for other actions.
     unlockPool();

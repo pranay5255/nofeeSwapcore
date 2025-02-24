@@ -381,6 +381,48 @@ function writeDoubleBalance(
   writeStorage(storageSlot, (amount1 << 128) | amount0);
 }
 
+///////////////////////////////////////////////////////// LP total supply slots
+
+// uint128(uint256(keccak256("totalSupply"))) - 1
+uint128 constant totalSupplySlot = 0x5daca5ccc655360fa5ccacf9c267936c;
+
+/// @notice This function increments/decrements total supply associated with
+/// LP positions.
+///
+/// @param poolId The pool identifier hosting this liquidity position.
+/// @param qMin Equal to '(2 ** 59) * (16 + log(pMin / pOffset))'.
+/// @param qMax Equal to '(2 ** 59) * (16 + log(pMax / pOffset))'.
+/// @param shares The number of shares to be added/subtracted.
+function updateTotalSupply(
+  uint256 poolId,
+  X59 qMin,
+  X59 qMax,
+  int256 shares
+) {
+  // We populate the first two memory slots from right to left:
+  //
+  //    0        32     40     48                64
+  //    |        |      |      |                 |
+  //    +--------+------+------+-----------------+
+  //    | poolId | qMin | qMax | totalSupplySlot |
+  //    +--------+------+------+-----------------+
+  //
+  uint256 storageSlot;
+  assembly {
+    mstore(32, totalSupplySlot) // 32 = 64 - 32
+    mstore(16, qMax) // 16 = 48 - 32
+    mstore(8, qMin) // 8 = 40 - 32
+    mstore(0, poolId) // 0 = 32 - 32
+    storageSlot := keccak256(0, 64)
+  }
+  uint256 totalSupply = readStorage(storageSlot);
+  assembly {
+    totalSupply := add(totalSupply, shares)
+  }
+  require(totalSupply <= type(uint128).max, BalanceOverflow(totalSupply));
+  writeStorage(storageSlot, totalSupply);
+}
+
 //////////////////////////////////////////////////////////////// Operator slots
 
 // uint96(uint256(keccak256("isOperator"))) - 1
