@@ -1,7 +1,7 @@
 // Copyright 2025, NoFeeSwap LLC - All rights reserved.
 pragma solidity ^0.8.28;
 
-import {IStorageAccess} from "../Interfaces/IStorageAccess.sol";
+import {IStorageAccess} from "../interfaces/IStorageAccess.sol";
 import {
   _dynamicParams_,
   _staticParams_,
