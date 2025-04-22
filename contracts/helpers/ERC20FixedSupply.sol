@@ -1,5 +1,5 @@
 // Copyright 2025, NoFeeSwap LLC - All rights reserved.
-pragma solidity 0.8.28;
+pragma solidity ^0.8.28;
 
 import {ERC20} from "@openzeppelin/token/ERC20/ERC20.sol";
 

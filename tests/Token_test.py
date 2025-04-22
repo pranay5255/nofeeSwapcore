@@ -1,11 +1,11 @@
 # Copyright 2025, NoFeeSwap LLC - All rights reserved.
 import pytest
 import brownie
-from brownie import accounts, TokenWrapper
+from brownie import accounts, TokenWrapper, ERC20FixedSupply, ERC1155FixedSupply, ERC6909FixedSupply
 from Nofee import logTest, address0
 
 @pytest.fixture(autouse=True)
-def deployment(fn_isolation, chain, ERC20FixedSupply, ERC1155FixedSupply, ERC6909FixedSupply):
+def deployment(fn_isolation):
     #  Two accounts are initiated
     root = accounts[0]
     other = accounts[1]
@@ -113,7 +113,7 @@ def test_erc6909transfer(deployment, request, worker_id):
 
     # We attempt to transfer 'not(0)' ERC6909 tokens to 'other' which reverts.
     # The resulting revert message is then examined.
-    with brownie.reverts('Integer overflow'):
+    with brownie.reverts('ERC6909InsufficientBalance: ' + wrapper0.address.lower() + ', ' + str(value) + ', ' + str((1 << 256) - 1) + ', ' + str(id)):
         tx = wrapper0.transfer(ERC6909, id, other, (1 << 256) - 1, {'from': root})
 
     # We transfer some ERC6909 from 'wrapper0' to 'other'
