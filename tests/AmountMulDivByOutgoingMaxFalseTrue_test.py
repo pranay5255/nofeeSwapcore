@@ -28,7 +28,7 @@ def wrapper(fn_isolation):
 def test_mulDivByOutgoingMax(wrapper, sqrtOffset, integral, growth, shares, outgoingMax, zeroOrOne, roundUp, request, worker_id):
     logTest(request, worker_id)
     
-    sqrtInverseOffset = (2 ** 127) // sqrtOffset
+    sqrtInverseOffset = (2 ** 254) // sqrtOffset
     if zeroOrOne:
         numerator = Integer(sqrtOffset * integral * growth * shares)
     else:

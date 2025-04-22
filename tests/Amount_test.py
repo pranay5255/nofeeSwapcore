@@ -27,7 +27,7 @@ def wrapper(fn_isolation):
 def test_calculateIntegralLimit(wrapper, outgoingMax, sqrtOffset, amountSpecified, growth, shares, request, worker_id):
     logTest(request, worker_id)
 
-    sqrtInverseOffset = (2 ** 127) // sqrtOffset
+    sqrtInverseOffset = (2 ** 254) // sqrtOffset
     tx = wrapper.calculateIntegralLimitWrapper(outgoingMax, sqrtOffset, sqrtInverseOffset, amountSpecified, growth, shares)
 
     print(tx.gas_used)
@@ -65,7 +65,7 @@ def test_calculateIntegralLimit(wrapper, outgoingMax, sqrtOffset, amountSpecifie
 def test_outOfRangeAmount(wrapper, sqrtOffset, growthMultiplier, shares, zeroOrOne, request, worker_id):
     logTest(request, worker_id)
     
-    sqrtInverseOffset = (2 ** 127) // sqrtOffset
+    sqrtInverseOffset = (2 ** 254) // sqrtOffset
     if zeroOrOne:
         expectedResult = ceiling(Integer(sqrtOffset * growthMultiplier * shares) / (2 ** 208))
     else:
