@@ -98,7 +98,7 @@ function calculateIntegralLimit() pure {
 ///
 ///     shares *
 ///
-///     (getZeroForOne() ? sqrtOffset : sqrtInverseOffset) * 
+///     (zeroOrOne ? sqrtOffset : sqrtInverseOffset) * 
 ///
 ///      multiplier
 ///     ------------
@@ -183,14 +183,11 @@ function safeOutOfRangeAmount(
 /// @notice Calculates the amounts of a tag within the active liquidity
 /// interval:
 ///
-/// 'amount := ceiling(
+/// 'amount := (zeroOrOne ? sqrtOffset : sqrtInverseOffset) * 
 ///
-///     (getZeroForOne() ? sqrtOffset : sqrtInverseOffset) * 
-///
-///      liquidity      integral
-///     ----------- * -------------
-///       2 ** 111     outgoingMax
-///  )'.
+///             liquidity      integral
+///            ----------- * -------------'
+///              2 ** 111     outgoingMax
 ///
 /// 'integral' should be non-negative.
 /// 'liquidity' should be greater than '- 2 ** 255'.
@@ -243,14 +240,11 @@ function inRangeAmount(
 /// interval and throws if the absolute value of the result exceeds
 /// 'type(int256).max':
 ///
-/// 'amount := ceiling(
+/// 'amount := (zeroOrOne ? sqrtOffset : sqrtInverseOffset) * 
 ///
-///     (zeroOrOne ? sqrtOffset : sqrtInverseOffset) * 
-///
-///      liquidity      integral
-///     ----------- * -------------
-///       2 ** 111     outgoingMax
-///  )'.
+///             liquidity      integral
+///            ----------- * -------------'.
+///              2 ** 111     outgoingMax
 ///
 /// 'integral' should be non-negative.
 /// 'liquidity' should be greater than '- 2 ** 255'.
