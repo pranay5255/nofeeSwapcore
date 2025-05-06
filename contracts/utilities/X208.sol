@@ -148,7 +148,7 @@ library X208Library {
       uint256(X216.unwrap(multiplier))
     );
     unchecked {
-      // Casting is safe because overflow is handled externally.
+      // Casting is safe because 'q2 >> 45' never exceeds 'type(int256).max'.
       // '45 == 244 + 208 + 216 - 512 - 111'
       product = X111.wrap(int256(q2 >> 45));
     }
