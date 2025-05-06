@@ -76,7 +76,7 @@ library FullMathLibrary {
       r1 := sub(
         sub(a1, b1),
         // 'a0 < b0' indicates that the subtraction 'a0 - b0' has underflowed.
-        // In this case '1' needs to be subtraction from the most significant
+        // In this case '1' needs to be subtracted from the most significant
         // 256 bits of the output.
         lt(a0, b0)
       )
@@ -291,7 +291,7 @@ library FullMathLibrary {
       //                         _____
       // 'r' is subtracted from 'q2 q1'.
       assembly {
-        // 'q1 < r' indicates that the subtraction 'q1 - r' underflowes.
+        // 'q1 < r' indicates that the subtraction 'q1 - r' underflows.
         // In this case '1' needs to be subtracted from q2.
         q2 := sub(q2, lt(q1, r))
         q1 := sub(q1, r)

@@ -168,7 +168,7 @@ library IndexLibrary {
     Index value
   ) {
     assembly {
-      // Index is the most significant 16 bit. Hence, to increment it we need
+      // Index is the most significant 16 bit. Hence, to decrement it we need
       // to subtract the slot by '2 ** 240'.
       value := sub(mload(pointer), shl(240, 1))
       mstore(pointer, value)

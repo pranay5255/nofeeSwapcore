@@ -126,7 +126,7 @@ function emitInitializeEvent() {
     mstore(sub(_staticParams_, 64), 0x20)
 
     // This slot should be populated with 'size'. Hence, we cache its current
-    // content so that it can be written back. Then we store a 'size.
+    // content so that it can be written back. Then we store a 'size'.
     // The subtractions are safe because both values are constants.
     let content1 := mload(sub(_staticParams_, 32))
     mstore(sub(_staticParams_, 32), size)
@@ -255,7 +255,7 @@ function emitSwapEvent() {
       // The addition is safe because we do not exceed the length of the curve
       // sequence.
       sub(endOfCurve, 16),
-      // '32' bytes is '128' bits which covers exactly two members of the curve
+      // 32 bytes is 128 bits which covers exactly two members of the curve
       // sequence and the 'growth' that we have just copied.
       32,
       selector,
@@ -310,7 +310,7 @@ function emitModifyKernelEvent() {
     log3(
       // During modifyKernel, 'staticParams', 'kernel', 'kernelCompact', and
       // 'hookData' appear in this order in memory. Hence, the beginning of
-      /// event data is '_staticParams_' which points to the start of
+      // event data is '_staticParams_' which points to the start of
       // 'staticParams' and the end of event data is 'hookData' which points
       // to the end of 'kernelCompact'. '64' is subtracted in order to include
       // the abi offset and 'size' slots.

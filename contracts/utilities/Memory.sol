@@ -1591,11 +1591,11 @@ uint16 constant _poolId_ = 216;
 //      prior to the transition from '[qLower, qUpper]' to the new interval
 //      '[qLower - qSpacing, qUpper - qSpacing]':
 //
-//                           gowthMultiplier[qCurrent - qSpacing]
+//                           growthMultiplier[qCurrent - qSpacing]
 //                                      <--|
 //                                         |            growthMultiplier[qBack]
 //                                         |                           |-->
-//                                         | gowthMultiplier[qCurrent] |
+//                                         | growthMultiplier[qCurrent]|
 //                                         |          <--|             |
 //                qLimit                   |             |             |
 //                   |                     |  growth(-1) |  growth(0)  |
@@ -1608,7 +1608,7 @@ uint16 constant _poolId_ = 216;
 //      where 'growth(0) := growthAmended'. As shown in the above figure,
 //      'growthMultiplier[qBack]' points towards '+oo' because it is on the
 //      right side of the active liquidity interval whereas
-//      'gowthMultiplier[qCurrent]' and 'gowthMultiplier[qCurrent - qSpacing]'
+//      'growthMultiplier[qCurrent]' and 'growthMultiplier[qCurrent - qSpacing]'
 //      point towards '-oo' because they are on the left side of the active
 //      liquidity interval.
 //
@@ -1658,13 +1658,13 @@ uint16 constant _poolId_ = 216;
 //        kept track of.
 //
 //      The following figure illustrates the above modification of the
-//      'gowthMultiplier' mapping:
+//      'growthMultiplier' mapping:
 //
-//                           gowthMultiplier[qCurrent - qSpacing]
+//                           growthMultiplier[qCurrent - qSpacing]
 //                                      <--|
 //                                         |            growthMultiplier[qBack]
 //                                         |                           |-->
-//                                         | gowthMultiplier[qCurrent] |
+//                                         | growthMultiplier[qCurrent]|
 //                                         |             |-->          |
 //                qLimit                   |             |             |
 //                   |                     |             |             |
@@ -2186,9 +2186,9 @@ uint16 constant _poolId_ = 216;
 //
 //        'totalReserveOfTag0After := 
 //
-//                                            growthAmend
-//         sqrtInverseOffset * sharesTotal * ------------- *
-//                                             2 ** 111
+//                                            growthAmended
+//         sqrtInverseOffset * sharesTotal * --------------- *
+//                                               2 ** 111
 //
 //                            - 8     / qUpper
 //           2 ** 216       e        |    - h / 2
@@ -2198,17 +2198,17 @@ uint16 constant _poolId_ = 216;
 //
 //      which simplify the first equation to:
 //
-//                             / qUpper
-//                            |    - h / 2
-//                            |  e         k(wAmended(h)) dh
-//                            |
-//            growth         / qTarget
-//        '------------- == ---------------------------------'.
-//          growthAmend           / qUpper
-//                               |    - h / 2
-//                               |  e         k(w(h)) dh
-//                               |
-//                              / qTarget
+//                               / qUpper
+//                              |    - h / 2
+//                              |  e         k(wAmended(h)) dh
+//                              |
+//              growth         / qTarget
+//        '--------------- == ---------------------------------'.
+//          growthAmended           / qUpper
+//                                 |    - h / 2
+//                                 |  e         k(w(h)) dh
+//                                 |
+//                                / qTarget
 //
 //      The two sides of the second equation can be derived as:
 //
@@ -2223,9 +2223,9 @@ uint16 constant _poolId_ = 216;
 //
 //        'totalReserveOfTag1After := 
 //
-//                                     growthAmend      2 ** 216
-//         sqrtOffset * sharesTotal * ------------- * ------------- *
-//                                      2 ** 111       outgoingMax
+//                                     growthAmended      2 ** 216
+//         sqrtOffset * sharesTotal * --------------- * ------------- *
+//                                        2 ** 111       outgoingMax
 //
 //            - 8     / qTarget
 //          e        |    + h / 2
@@ -2235,19 +2235,19 @@ uint16 constant _poolId_ = 216;
 //
 //      which simplifies the second equation to:
 //
-//                             / qTarget
-//                            |    + h / 2
-//                            |  e         k(wAmended(h)) dh
-//                            |
-//            growth         / qLower
-//        '------------- == ---------------------------------'.
-//          growthAmend           / qTarget
-//                               |    + h / 2
-//                               |  e         k(w(h)) dh
-//                               |
-//                              / qLower
+//                               / qTarget
+//                              |    + h / 2
+//                              |  e         k(wAmended(h)) dh
+//                              |
+//            growth           / qLower
+//        '--------------- == ---------------------------------'.
+//          growthAmended           / qTarget
+//                                 |    + h / 2
+//                                 |  e         k(w(h)) dh
+//                                 |
+//                                / qLower
 //
-//      Based on the above equations, finding 'growthAmend' with respect to
+//      Based on the above equations, finding 'growthAmended' with respect to
 //      'k(w(.))' and 'k(wAmended(.))' is straightforward.
 //
 //      However, in order to satisfy both of the equations, we should have:
@@ -2503,17 +2503,17 @@ uint16 constant _poolId_ = 216;
 //
 //      After that, we derive 'growthAmended' based on the following formula:
 //
-//                                        / qTarget
-//                                       |    + h / 2
-//                                       |  e         k(w(h)) dh
-//                                       |
-//                                      / qLower
-//        'growthAmend == growth * ---------------------------------'.
-//                                    / qTarget
-//                                   |    + h / 2
-//                                   |  e         k(wAmended(h)) dh
-//                                   |
-//                                  / qLower
+//                                          / qTarget
+//                                         |    + h / 2
+//                                         |  e         k(w(h)) dh
+//                                         |
+//                                        / qLower
+//        'growthAmended == growth * ---------------------------------'.
+//                                      / qTarget
+//                                     |    + h / 2
+//                                     |  e         k(wAmended(h)) dh
+//                                     |
+//                                    / qLower
 //
 //      This concludes the update of our liquidity distribution function (or
 //      equivalently, the update of our AMM diagram) for the next swap.
@@ -4741,7 +4741,7 @@ uint16 constant _forward1_ = 1225;
 //   )'.
 //
 // The pointer below refers to the above integral in 'X216' representation
-// which take up to 27 bytes.
+// which takes up to 27 bytes.
 uint16 constant _incomingCurrentToTarget_ = 1287;
 
 // While searching for 'qTarget', the integral 'currentToTarget' is calculated.
@@ -4761,7 +4761,7 @@ uint16 constant _incomingCurrentToTarget_ = 1287;
 //   )'
 //
 // The pointer below refers to the above integral in 'X216' representation
-// which take up to 27 bytes.
+// which takes up to 27 bytes.
 uint16 constant _currentToTarget_ = 1314;
 
 // While searching for 'qTarget' and 'qOvershoot', we need to calculate the
@@ -4784,7 +4784,7 @@ uint16 constant _currentToTarget_ = 1314;
 // 'Interval.sol'.
 //
 // The pointer below refers to the above integral in 'X216' representation
-// which take up to 27 bytes.
+// which takes up to 27 bytes.
 uint16 constant _currentToOrigin_ = 1341;
 
 // While searching for 'qTarget' and 'qOvershoot', we need to calculate the
@@ -4807,7 +4807,7 @@ uint16 constant _currentToOrigin_ = 1341;
 // in 'Interval.sol'.
 //
 // The pointer below refers to the above integral in 'X216' representation
-// which take up to 27 bytes.
+// which takes up to 27 bytes.
 uint16 constant _currentToOvershoot_ = 1368;
 
 // While searching for 'qOvershoot', we need to calculate the following
@@ -4838,7 +4838,7 @@ uint16 constant _currentToOvershoot_ = 1368;
 // in 'Interval.sol'.
 //
 // The pointer below refers to the above integral in 'X216' representation
-// which take up to 27 bytes.
+// which takes up to 27 bytes.
 uint16 constant _targetToOvershoot_ = 1395;
 
 // While searching for 'qTarget' and 'qOvershoot', we need to calculate the
@@ -4869,7 +4869,7 @@ uint16 constant _targetToOvershoot_ = 1395;
 // in 'Interval.sol'.
 //
 // The pointer below refers to the above integral in 'X216' representation
-// which take up to 27 bytes.
+// which takes up to 27 bytes.
 uint16 constant _originToOvershoot_ = 1422;
 
 uint16 constant _endOfInterval_ = 1449;
@@ -5094,7 +5094,7 @@ uint16 constant _growth_ = 1653;
 // 'qUpper := log(pUpper / pOffset)'.
 //
 // The memory space which is pointed to by '_integral0_' hosts the following
-// integral in 'X216' representation which take up to 27 bytes:
+// integral in 'X216' representation which takes up to 27 bytes:
 //
 //                     - 8     / qUpper
 //    integral0      e        |    - h / 2
@@ -5120,7 +5120,7 @@ uint16 constant _integral0_ = 1669;
 // 'qLower := log(pLower / pOffset)'.
 //
 // The memory space which is pointed to by '_integral1_' hosts the following
-// integral in 'X216' representation which take up to 27 bytes:
+// integral in 'X216' representation which takes up to 27 bytes:
 //
 //                     - 8     / qCurrent
 //    integral1      e        |    + h / 2
@@ -5399,28 +5399,28 @@ uint16 constant _incomingMax_ = 2009;
 //                                  / qLower
 //
 // Then we have:
-//                            integral0Incremented
-//  'growthAmend := growth * ----------------------
-//                              integral0Amended
+//                              integral0Incremented
+//  'growthAmended := growth * ----------------------
+//                                integral0Amended
 //
-//                            integral1Incremented
-//               == growth * ----------------------'.
-//                              integral1Amended
+//                              integral1Incremented
+//                 == growth * ----------------------'.
+//                                integral1Amended
 //
 // Now, the marginal growth with respect to 'tag0' and 'tag1' can be defined
 // as:
 //
 //  'marginalGrowthOfTag0 := sqrtInverseOffset * sharesTotal * 
 //
-//                            growthAmend - growth     integral0Amended
-//                           ---------------------- * ------------------',
-//                                  2 ** 111             outgoingMax
+//                            growthAmended - growth     integral0Amended
+//                           ------------------------ * ------------------',
+//                                    2 ** 111             outgoingMax
 //
 //  'marginalGrowthOfTag1 := sqrtOffset * sharesTotal * 
 //
-//                            growthAmend - growth     integral1Amended
-//                           ---------------------- * ------------------'.
-//                                  2 ** 111             outgoingMax
+//                            growthAmended - growth     integral1Amended
+//                           ------------------------ * ------------------'.
+//                                    2 ** 111             outgoingMax
 //
 // Hence, as a result of this swap, the amount of 'tag0' that goes to the
 // protocol is equal to:

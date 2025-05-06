@@ -15,7 +15,7 @@ library IntegralLibrary {
   using PriceLibrary for uint256;
 
   /// @notice Let 'l' and 'u' denote the logarithmic prices whose offset binary
-  /// 'X59' representation are stored in the pointers 'price0' and 'price1',
+  /// 'X59' representation is stored in the pointers 'price0' and 'price1',
   /// respectively. In other words, define:
   ///
   ///               price0.log()                         price1.log()
@@ -473,16 +473,12 @@ library IntegralLibrary {
   }
 
   /// @notice Let 'f' and 't' denote the logPrice values whose offset binary
-  /// 'X59' representation are stored in the pointers 'from' and 'to',
+  /// 'X59' representation is stored in the pointers 'from' and 'to',
   /// respectively. In other words, define:
   ///
   ///               from.log()                          to.log()
   ///  f := - 16 + ------------    and    t := - 16 + ------------
   ///                2 ** 59                            2 ** 59
-  ///
-  /// Let '(b0, c0)' and '(b1, c1)' represent the segment coordinates to be
-  /// loaded from the memory using 'coordinate0' and 'coordinate0 + 64',
-  /// respectively.
   ///
   /// Additionally, let '(b0, c0)' and '(b1, c1)' represent the segment
   /// coordinates to be loaded from the memory via the pointers
@@ -629,7 +625,7 @@ library IntegralLibrary {
       //
       // The subtraction is safe, because if 'f <= t' then
       // 'left == false' and we have 'exp(- 8 - t / 2) <= exp(-8 - f / 2)'
-      // which concludes 'to.sqrt(left) <= from.sqrt(left)'
+      // which concludes 'to.sqrt(left) <= from.sqrt(left)'.
       //
       // On the other hand, if 't < f' then 'left == true' and we have
       // 'exp(- 8 + t / 2) < exp(- 8 + f / 2)' which concludes
@@ -648,7 +644,7 @@ library IntegralLibrary {
         return result;
       }
 
-      // 'b0' is loaded from the memory and temporarily placed in 'db'.
+      // 'b0' is loaded from memory and temporarily placed in 'db'.
       db = coordinate0.log();
 
       // Next, if 'left == true', we calculate 
@@ -876,7 +872,7 @@ library IntegralLibrary {
   }
 
   /// @notice Let 'f' and 't' denote the logPrice values whose offset binary
-  /// 'X59' representation are stored in the pointers 'from' and 'to',
+  /// 'X59' representation is stored in the pointers 'from' and 'to',
   /// respectively. In other words, define:
   ///
   ///               from.log()                          to.log()

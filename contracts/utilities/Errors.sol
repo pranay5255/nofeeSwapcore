@@ -117,7 +117,7 @@ error RepetitiveVerticalCoordinates(X15 c_i);
 /// @notice Thrown when 'kernelLength' is out of range.
 error KernelIndexOutOfRange(Index length);
 
-/// @notice The last vertical coordinate should be equal to oneX15'.
+/// @notice The last vertical coordinate should be equal to 'oneX15'.
 error LastVerticalCoordinateMismatch(X15 c_j);
 
 /// @notice Thrown when growth exceeds maximum permitted value of 'maxGrowth'.
@@ -129,15 +129,15 @@ error AccruedGrowthPortionOverflow(X127 accruedValue);
 /// @notice Thrown when given flags are invalid or not consistent with hook.
 error InvalidFlags(uint256);
 
-/// @notice Thrown when the numercal search for outgoing target fails which 
+/// @notice Thrown when the numerical search for outgoing target fails which 
 /// should never heappen.
 error SearchingForOutgoingTargetFailed();
 
-/// @notice Thrown when the numercal search for incoming target fails which
+/// @notice Thrown when the numerical search for incoming target fails which
 /// should never heappen.
 error SearchingForIncomingTargetFailed();
 
-/// @notice Thrown when the numercal search for overshoot fails which should
+/// @notice Thrown when the numerical search for overshoot fails which should
 /// never heappen.
 error SearchingForOvershootFailed();
 
@@ -240,7 +240,7 @@ error OnlyByPoolOwner(address attemptingAddress, address poolOwnerAddress);
 error LogPriceMinIsNotSpaced(X59 logPriceMin);
 
 /// @notice Thrown when attempting to mint/burn a position with invalid
-/// upper bound which is not equal to interval boundaries modulo 'qSpacing'
+/// upper bound which is not equal to interval boundaries modulo 'qSpacing'.
 error LogPriceMaxIsNotSpaced(X59 logPriceMax);
 
 /// @notice Thrown when attempting to mint/burn a position with invalid

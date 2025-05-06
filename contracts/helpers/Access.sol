@@ -57,7 +57,7 @@ import {X216} from "../utilities/X216.sol";
 using PriceLibrary for uint16;
 
 /// @title Access
-/// @dev This auxillary contract allows us to fetch pool parameters from
+/// @dev This auxiliary contract allows us to fetch pool parameters from
 /// nofeeswap contract.
 contract Access {
   /// @notice This function reads nofeeswap's protocol slot.

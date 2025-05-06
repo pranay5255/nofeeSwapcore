@@ -249,7 +249,7 @@ interface INofeeswapDelegatee {
   ///   'amount0 = (
   ///       growthMultiplier[logPriceMinOffsetted] - 
   ///       growthMultiplier[logPriceMaxOffsetted]
-  ///    ) * sqrtInverseOffset'
+  ///    ) * sqrtInverseOffset'.
   ///
   /// Now, assume that 'pMax < pLower'. The amount of tag1 corresponding to a
   /// single share from 'logPriceMin' to 'pMax' is equal to:

@@ -3,7 +3,7 @@ pragma solidity ^0.8.28;
 
 /// @notice Each hook is invoked depending on whether its corresponding poolId
 /// flag is nonzero.
-/// @dev All of these functions should only be callable by nofeeswap only.
+/// @dev All of these functions should be callable by nofeeswap only.
 /// @dev Each pre hook is invoked while the corresponding pool is unlocked. A
 /// snapshot of all the input data is provided. Other parameters can be read
 /// externally.

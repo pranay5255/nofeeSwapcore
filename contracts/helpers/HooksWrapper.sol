@@ -5,8 +5,7 @@ import {BaseHook} from "../hooks/BaseHook.sol";
 import {_hookInputByteCount_, setPoolId} from "../utilities/Memory.sol";
 import "../utilities/Hooks.sol";
 
-/// @title This contract exposes the internal functions of 'Hooks.sol' for
-/// testing purposes.
+/// @title This contract exposes internal functions of 'Hooks.sol' for testing.
 contract HooksWrapper {
   function _getHook(
     uint256 poolId

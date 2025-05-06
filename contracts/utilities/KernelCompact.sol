@@ -107,7 +107,7 @@ library KernelCompactLibrary {
         //    (2 ** 15) * c[i]
         //
         // In other words, the pointer to be used to access the 'height' and 
-        // 'logShift' should point to the end of 'height' and the begining of
+        // 'logShift' should point to the end of 'height' and the beginning of
         // 'logShift'. Since 'height' occupies 2 bytes, we move 2 bytes forward
         // to point to the end of it. We move 10 bytes backward because the
         // first breakpoint which is supposed to be '(zeroX15, zeroX59)' is 
