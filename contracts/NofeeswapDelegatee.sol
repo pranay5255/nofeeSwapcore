@@ -227,7 +227,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     validateFlags();
 
     // Reads 'maxPoolGrowthPortion' and 'protocolGrowthPortion' from the
-    // Sentinel contract or storage.s
+    // Sentinel contract or storage.
     readGrowthPortions();
 
     // Sets 'oneX111' as the initial growth value for the current active
