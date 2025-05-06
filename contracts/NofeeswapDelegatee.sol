@@ -592,7 +592,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     {
       // Reads 'qLower' and 'qUpper' boundaries of the current interval from
       // storage.
-      (X59 qLower, X59 qUpper) = readBoundaries();
+      readBoundaries();
 
       // 'kernelCompact' is validated and its length is determined. 
       kernelCompact.validate();
