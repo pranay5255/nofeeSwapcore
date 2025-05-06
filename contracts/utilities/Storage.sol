@@ -1217,8 +1217,8 @@ function readBoundaries() view returns (
     mstore(curve, firstSlot)
   }
   
-  qLower = getCurve().member(zeroIndex);
-  qUpper = getCurve().member(oneIndex);
+  qLower = curve.member(zeroIndex);
+  qUpper = curve.member(oneIndex);
   (qLower, qUpper) = qLower < qUpper ? (qLower, qUpper) : (qUpper, qLower);
 }
 
