@@ -1360,6 +1360,8 @@ function writeStaticParams(uint256 storagePointer) {
     proxy := create2(0, 0x10, 0x10, storagePointer)
   }
 
+  require(proxy != address(0), DeploymentFailed());
+
   // The total number of bytes to be written.
   Index length = getKernelLength();
   uint256 deploymentCreationCode;
