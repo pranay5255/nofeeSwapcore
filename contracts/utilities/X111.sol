@@ -169,7 +169,7 @@ library X111Library {
   ) internal pure returns (
     X208 product
   ) {
-    // Both castings are safe because are safe because
+    // Both castings are safe because
     // 'growth >= oneX111' and 'multiplier >= zeroX216'
     ( ,  , uint256 q2) = FullMathLibrary.mul768(
       // (2 ** 244) * exp(8)
