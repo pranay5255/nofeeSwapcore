@@ -6,6 +6,7 @@ import {Index} from "./Index.sol";
 import {X47} from "./X47.sol";
 import {Tag} from "./Tag.sol";
 import {
+  AlreadyUnlocked,
   ProtocolIsLocked,
   PoolIsLocked,
   DeploymentFailed,
@@ -131,6 +132,10 @@ uint256 constant callerSlot =
 /// @param unlockTarget The first input of the method 'INofeeswap.unlock'.
 /// @param caller The address which has called 'INofeeswap.unlock'.
 function unlockProtocol(address unlockTarget, address caller) {
+  // Checks if the protocol is already unlocked.
+  address currentCaller = readAddressTransient(callerSlot);
+  require(currentCaller == address(0), AlreadyUnlocked(currentCaller));
+
   // Writes 'unlockTarget' on the dedicated transient storage slot.
   writeTransient(unlockTargetSlot, unlockTarget);
 

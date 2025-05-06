@@ -141,6 +141,9 @@ error SearchingForIncomingTargetFailed();
 /// never heappen.
 error SearchingForOvershootFailed();
 
+/// @notice Thrown if attempting to unlock the protocol while already unlocked.
+error AlreadyUnlocked(address currentCaller);
+
 /// @notice Thrown when any of the following methods are invoked prior to the
 /// protocol being unlocked:
 ///
