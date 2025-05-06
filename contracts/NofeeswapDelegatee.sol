@@ -657,7 +657,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
   /// @inheritdoc INofeeswapDelegatee
   function modifyProtocol(
     uint256 protocol
-  ) external override {
+  ) external override sentry {
     address owner = getProtocolOwner(readProtocol());
     require(msg.sender == owner, OnlyByProtocol(msg.sender, owner));
     require(
@@ -688,7 +688,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
   /// @inheritdoc INofeeswapDelegatee
   function modifySentinel(
     ISentinel sentinel
-  ) external override {
+  ) external override sentry {
     address owner = getProtocolOwner(readProtocol());
     require(msg.sender == owner, OnlyByProtocol(msg.sender, owner));
 
@@ -706,7 +706,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
   function modifyPoolOwner(
     uint256 poolId,
     address newOwner
-  ) external override {
+  ) external override sentry {
     uint256 slot = getPoolOwnerSlot(poolId);
     address oldOwner = readPoolOwner(slot);
     require(msg.sender == oldOwner, OnlyByPoolOwner(msg.sender, oldOwner));
@@ -723,7 +723,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
   function modifyPoolGrowthPortion(
     uint256 poolId,
     X47 poolGrowthPortion
-  ) external override {
+  ) external override sentry {
     // Places the input parameters in memory and sets the input for sentinel
     // call.
     readModifyPoolGrowthPortionInput();
@@ -810,7 +810,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
   /// @inheritdoc INofeeswapDelegatee
   function updateGrowthPortions(
     uint256 poolId
-  ) external {
+  ) external sentry {
     // Places the input parameters in memory and sets the input for sentinel
     // call.
     readUpdateGrowthPortionsInput();
@@ -891,7 +891,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
   /// @inheritdoc INofeeswapDelegatee
   function collectPool(
     uint256 poolId
-  ) external override returns (
+  ) external override sentry returns (
     uint256 amount0,
     uint256 amount1
   ) {
@@ -939,7 +939,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
   /// @inheritdoc INofeeswapDelegatee
   function collectProtocol(
     uint256 poolId
-  ) external override returns (
+  ) external override sentry returns (
     uint256 amount0,
     uint256 amount1
   ) {
@@ -988,7 +988,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
 
   /// @notice Redeploys static parameters and kernel through delegatecall to
   /// self.
-  function redeployStaticParamsAndKernel() external {
+  function redeployStaticParamsAndKernel() external sentry {
     (
       uint256 poolId,
       uint256 sourcePointer,
