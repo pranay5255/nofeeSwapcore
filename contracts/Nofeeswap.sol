@@ -463,9 +463,7 @@ contract Nofeeswap is INofeeswap, StorageAccess, TransientAccess {
     address token
   ) external override {
     writeReserveToken(token, false);
-    if (token != address(0)) {
-      writeReserveValue(token.balanceOfSelf());
-    }
+    writeReserveValue(token.balanceOfSelf());
   }
 
   /// @inheritdoc INofeeswap
