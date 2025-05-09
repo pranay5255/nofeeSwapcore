@@ -138,7 +138,11 @@ interface INofeeswap is IStorageAccess, ITransientAccess {
     bytes memory result
   );
 
-  /// @notice Clears positive transient balance.
+  /// @notice WARNING - Once a balance is cleared, the corresponding funds
+  /// become permanently inaccessible and remain locked within the contract.
+  /// Executing a clear call will erase the entire balance owed to the caller
+  /// without initiating any outbound transfer.
+  /// @notice Clears transient balance owed to 'msg.sender'.
   /// @param tag The tag whose transient balance to be cleared.
   /// @param amount The amount to be cleared which must be equal to the current
   /// transient balance of the caller.
