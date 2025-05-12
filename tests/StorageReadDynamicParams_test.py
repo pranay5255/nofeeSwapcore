@@ -82,26 +82,30 @@ def test_readDynamicParams(wrapper, poolId, content0, content1, content2, conten
     
     # Check if the storage slots dedicated to dynamic parameters are read correctly.
     _staticParamsStoragePointerExtension = content3
-    _growth = content0 >> 128
-    _integral0 = ((content0 % (1 << 128)) << 88) + (content1 >> 168)
-    _integral1 = ((content1 % (1 << 168)) << 48) + (content2 >> 208)
-    _sharesTotal = (content2 % (1 << 208)) >> 80
-    _staticParamsStoragePointer = (content2 % (1 << 80)) >> 64
-    _logPriceCurrent = content2 % (1 << 64)
+    _staticParamsStoragePointer = (content0 >> (256 - 16)) % (1 << 16)
+    _logPriceCurrent = (content0 >> (256 - 16 - 64)) % (1 << 64)
+    _sharesTotal = (content0 >> (256 - 16 - 64 - 128)) % (1 << 128)
+    _growth_1 = (content0 >> (256 - 16 - 64 - 128 - 48)) % (1 << 48)
+    _growth_0 = (content1 >> (256 - 80)) % (1 << 80)
+    _growth = (_growth_1 << 80) + _growth_0
+    _integral0_1 = (content1 >> (256 - 80 - 176)) % (1 << 176)
+    _integral0_0 = (content2 >> (256 - 40)) % (1 << 40)
+    _integral0 = (_integral0_1 << 40) + _integral0_0
+    _integral1 = (content2 >> (256 - 40 - 216)) % (1 << 216)
 
     if _growth != 0:
         tx = wrapper._readDynamicParams(poolId, content0, content1, content2, content3)
-        staticParamsStoragePointerExtension, growth, integral0, integral1, sharesTotal, staticParamsStoragePointer, logPriceCurrent = tx.return_value
+        staticParamsStoragePointerExtension, staticParamsStoragePointer, logPriceCurrent, sharesTotal, growth, integral0, integral1 = tx.return_value
         if _staticParamsStoragePointer == 0xFFFF:
             assert staticParamsStoragePointerExtension == _staticParamsStoragePointerExtension
         else:
             assert staticParamsStoragePointerExtension == _staticParamsStoragePointer
+        assert staticParamsStoragePointer == _staticParamsStoragePointer
+        assert logPriceCurrent == _logPriceCurrent
+        assert sharesTotal == _sharesTotal
         assert growth == _growth
         assert integral0 == _integral0
         assert integral1 == _integral1
-        assert sharesTotal == _sharesTotal
-        assert staticParamsStoragePointer == _staticParamsStoragePointer
-        assert logPriceCurrent == _logPriceCurrent
     else:
         with brownie.reverts('PoolDoesNotExist: ' + str(poolId)):
             tx = wrapper._readDynamicParams(poolId, content0, content1, content2, content3)

@@ -563,12 +563,12 @@ contract StorageWrapper {
     uint256 content3
   ) public returns (
     uint256 staticParamsStoragePointerExtension,
+    uint16 staticParamsStoragePointer,
+    X59 logPriceCurrent,
+    uint256 sharesTotal,
     X111 growth,
     X216 integral0,
-    X216 integral1,
-    uint256 sharesTotal,
-    uint16 staticParamsStoragePointer,
-    X59 logPriceCurrent
+    X216 integral1
   ) {
     setPoolId(poolId);
     uint256 storageSlot = getDynamicParamsSlot(poolId);
@@ -579,24 +579,24 @@ contract StorageWrapper {
     readDynamicParams();
     return (
       getStaticParamsStoragePointerExtension(),
+      getStaticParamsStoragePointer(),
+      getLogPriceCurrent(),
+      getSharesTotal(),
       getGrowth(),
       getIntegral0(),
-      getIntegral1(),
-      getSharesTotal(),
-      getStaticParamsStoragePointer(),
-      getLogPriceCurrent()
+      getIntegral1()
     );
   }
 
   function _writeDynamicParams(
     uint256 poolId,
     uint256 staticParamsStoragePointerExtension,
+    uint16 staticParamsStoragePointer,
+    X59 logPriceCurrent,
+    uint256 sharesTotal,
     X111 growth,
     X216 integral0,
-    X216 integral1,
-    uint256 sharesTotal,
-    uint16 staticParamsStoragePointer,
-    X59 logPriceCurrent
+    X216 integral1
   ) public returns (
     uint256 content0,
     uint256 content1,
@@ -607,12 +607,12 @@ contract StorageWrapper {
     setStaticParamsStoragePointerExtension(
       staticParamsStoragePointerExtension
     );
+    setStaticParamsStoragePointer(staticParamsStoragePointer);
+    setLogPriceCurrent(logPriceCurrent);
+    setSharesTotal(sharesTotal);
     setGrowth(growth);
     setIntegral0(integral0);
     setIntegral1(integral1);
-    setSharesTotal(sharesTotal);
-    setStaticParamsStoragePointer(staticParamsStoragePointer);
-    setLogPriceCurrent(logPriceCurrent);
     writeDynamicParams();
     uint256 storageSlot = getDynamicParamsSlot(poolId);
     return (

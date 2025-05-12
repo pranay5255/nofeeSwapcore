@@ -5001,6 +5001,57 @@ uint16 constant _dynamicParams_ = 1621;
 // contract that contains the static parameters and the kernel.
 uint16 constant _staticParamsStoragePointerExtension_ = 1621;
 
+// The content of this 2 bytes memory space is used to retrieve the address of
+// the smart contract which holds the pool's static parameters and the kernel
+// in its bytecode. This value is incremented every time that any of the static
+// parameters are updated or when the kernel is modified. In the event of
+// overflow, this value is set to 'type(uint16).max' and the 32 bytes space
+// which is pointed to by '_staticParamsStoragePointerExtension_' is used to
+// store the value from which the address to the storage smart contract is
+// derived.
+uint16 constant _staticParamsStoragePointer_ = 1653;
+
+// This 8 bytes memory space hosts 'logPriceCurrent' which is the offsetted
+// value of the current log price of the pool in 'X59' representation. More
+// precisely,
+//
+//  'logPriceCurrent := (2 ** 59) * (16 + qCurrent)'
+//
+// where 
+// 
+//  'qCurrent := log(pCurrent / pOffset)',
+//
+// and 'pCurrent' represents the current price of the pool.
+//
+// This value is also used to determine the end of the curve sequence while
+// reading the curve sequence from storage. Because the curve sequence does not
+// have a length slot, but its last member is equal to 'logPriceCurrent'.
+uint16 constant _logPriceCurrent_ = 1655;
+
+// The total number of shares that are deposited in the current active
+// liquidity interval across all LPs.
+//
+// We keep track of the total share values in all of the liquidity intervals
+// via the mapping 'sharesDelta' within protocol's storage. Let 'qBoundary'
+// denote an arbitrary boundary for a liquidity interval, i.e.,
+//
+//  'qBoundary == qLower + j * qSpacing'
+//
+// for some integer 'j'. Let 'sharesTotalLeft' and 'sharesTotalRight' denote
+// the total number of shares within the intervals
+//
+//  '[qBoundary - qSpacing, qBoundary]' and
+//  '[qBoundary, qBoundary + qSpacing]',
+//
+// respectively. Define:
+//
+//  'sharesDelta[qBoundary] := sharesTotalRight - sharesTotalLeft'.
+//
+// In other words, 'sharesDelta[qBoundary]' is defined as the difference
+// between the total number of shares within the two liquidity intervals that
+// contain 'qBoundary'.
+uint16 constant _sharesTotal_ = 1663;
+
 // With each visit to a liquidity interval or as a result of donations, the
 // amount of liquidity which is allocated to a single LP share increases. We
 // use the parameter 'growth' to keep track of liquidity per share for the
@@ -5085,7 +5136,7 @@ uint16 constant _staticParamsStoragePointerExtension_ = 1621;
 // On the contrary, 'growthMultiplier[qLower]' and
 // 'growthMultiplier[qLower - qSpacing]' point towards '-oo' as well as every
 // growthMultiplier[qUpper - m * qSpacing] for positive integers 'm'.
-uint16 constant _growth_ = 1653;
+uint16 constant _growth_ = 1679;
 
 // Let 'pCurrent' and 'pUpper' represent the current price and the maximum
 // price of the active liquidity interval, respectively, and define:
@@ -5111,7 +5162,7 @@ uint16 constant _growth_ = 1653;
 //                         ---------- * -------------
 //                          2 ** 111     outgoingMax
 //
-uint16 constant _integral0_ = 1669;
+uint16 constant _integral0_ = 1695;
 
 // Let 'pCurrent' and 'pLower' represent the current price and the minimum
 // price of the active liquidity interval, respectively, and define:
@@ -5137,58 +5188,7 @@ uint16 constant _integral0_ = 1669;
 //                         ---------- * -------------
 //                          2 ** 111     outgoingMax
 //
-uint16 constant _integral1_ = 1696;
-
-// The total number of shares that are deposited in the current active
-// liquidity interval across all LPs.
-//
-// We keep track of the total share values in all of the liquidity intervals
-// via the mapping 'sharesDelta' within protocol's storage. Let 'qBoundary'
-// denote an arbitrary boundary for a liquidity interval, i.e.,
-//
-//  'qBoundary == qLower + j * qSpacing'
-//
-// for some integer 'j'. Let 'sharesTotalLeft' and 'sharesTotalRight' denote
-// the total number of shares within the intervals
-//
-//  '[qBoundary - qSpacing, qBoundary]' and
-//  '[qBoundary, qBoundary + qSpacing]',
-//
-// respectively. Define:
-//
-//  'sharesDelta[qBoundary] := sharesTotalRight - sharesTotalLeft'.
-//
-// In other words, 'sharesDelta[qBoundary]' is defined as the difference
-// between the total number of shares within the two liquidity intervals that
-// contain 'qBoundary'.
-uint16 constant _sharesTotal_ = 1723;
-
-// The content of this 2 bytes memory space is used to retrieve the address of
-// the smart contract which holds the pool's static parameters and the kernel
-// in its bytecode. This value is incremented every time that any of the static
-// parameters are updated or when the kernel is modified. In the event of
-// overflow, this value is set to 'type(uint16).max' and the 32 bytes space
-// which is pointed to by '_staticParamsStoragePointerExtension_' is used to
-// store the value from which the address to the storage smart contract is
-// derived.
-uint16 constant _staticParamsStoragePointer_ = 1739;
-
-// This 8 bytes memory space hosts 'logPriceCurrent' which is the offsetted
-// value of the current log price of the pool in 'X59' representation. More
-// precisely,
-//
-//  'logPriceCurrent := (2 ** 59) * (16 + qCurrent)'
-//
-// where 
-// 
-//  'qCurrent := log(pCurrent / pOffset)',
-//
-// and 'pCurrent' represents the current price of the pool.
-//
-// This value is also used to determine the end of the curve sequence while
-// reading the curve sequence from storage. Because the curve sequence does not
-// have a length slot, but its last member is equal to 'logPriceCurrent'.
-uint16 constant _logPriceCurrent_ = 1741;
+uint16 constant _integral1_ = 1722;
 
 // For every pool, the static parameters and the kernel are encoded in the
 // source code of a storage smart contract which is deployed using a disposable

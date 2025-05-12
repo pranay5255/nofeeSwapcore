@@ -60,12 +60,12 @@ variables = [
     ['hookDataByteCount', 16, 'uint16', 'getter', 'setter'],
     ['dynamicParams', 0],
     ['staticParamsStoragePointerExtension', 256, 'uint256', 'getter', 'setter'],
+    ['staticParamsStoragePointer', 16, 'uint16', 'getter', 'setter'],
+    ['logPriceCurrent', 64, 'X59', 'getter', 'setter'],
+    ['sharesTotal', 128, 'uint256', 'getter', 'setter'],
     ['growth', 128, 'X111', 'getter', 'setter'],
     ['integral0', 216, 'X216', 'getter', 'setter'],
     ['integral1', 216, 'X216', 'getter', 'setter'],
-    ['sharesTotal', 128, 'uint256', 'getter', 'setter'],
-    ['staticParamsStoragePointer', 16, 'uint16', 'getter', 'setter'],
-    ['logPriceCurrent', 64, 'X59', 'getter', 'setter'],
     ['deploymentCreationCode', 88, 'uint256', 'setter'],
     ['staticParams', 0],
     ['tag0', 256, 'Tag', 'getter', 'setter'],
@@ -320,12 +320,12 @@ for k in variables:
 
 # 1621 dynamicParams
 # 1621 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX                                        staticParamsStoragePointerExtension               256
-# 1653 XXXXXXXXXXXXXXXX                                                        growth                                            128
-# 1669 XXXXXXXXXXXXXXXXXXXXXXXXXXX                                             integral0                                         216
-# 1696 XXXXXXXXXXXXXXXXXXXXXXXXXXX                                             integral1                                         216
-# 1723 XXXXXXXXXXXXXXXX                                                        sharesTotal                                       128
-# 1739 XX                                                                      staticParamsStoragePointer                        16
-# 1741 XXXXXXXX                                                                logPriceCurrent                                   64
+# 1653 XX                                                                      staticParamsStoragePointer                        16
+# 1655 XXXXXXXX                                                                logPriceCurrent                                   64
+# 1663 XXXXXXXXXXXXXXXX                                                        sharesTotal                                       128
+# 1679 XXXXXXXXXXXXXXXX                                                        growth                                            128
+# 1695 XXXXXXXXXXXXXXXXXXXXXXXXXXX                                             integral0                                         216
+# 1722 XXXXXXXXXXXXXXXXXXXXXXXXXXX                                             integral1                                         216
 
 # 1749 XXXXXXXXXXX                                                             deploymentCreationCode                            88
 

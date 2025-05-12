@@ -212,12 +212,12 @@ contract Access {
     uint256 poolId
   ) external view returns (
     uint256 staticParamsStoragePointerExtension,
+    uint16 staticParamsStoragePointer,
+    X59 logPriceCurrent,
+    uint256 sharesTotal,
     X111 growth,
     X216 integral0,
-    X216 integral1,
-    uint256 sharesTotal,
-    uint16 staticParamsStoragePointer,
-    X59 logPriceCurrent
+    X216 integral1
   ) {
     bytes32 slot = 
       nofeeswap.storageAccess(bytes32(getDynamicParamsSlot(poolId) - 1));
@@ -242,12 +242,12 @@ contract Access {
 
     staticParamsStoragePointerExtension = 
       getStaticParamsStoragePointerExtension();
+    staticParamsStoragePointer = getStaticParamsStoragePointer();
+    logPriceCurrent = getLogPriceCurrent();
+    sharesTotal = getSharesTotal();
     growth = getGrowth();
     integral0 = getIntegral0();
     integral1 = getIntegral1();
-    sharesTotal = getSharesTotal();
-    staticParamsStoragePointer = getStaticParamsStoragePointer();
-    logPriceCurrent = getLogPriceCurrent();
   }
 
   ///// @notice Gives on-chain access to nofeeswap's pools curve.

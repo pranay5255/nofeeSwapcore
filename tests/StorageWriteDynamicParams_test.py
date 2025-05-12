@@ -87,10 +87,12 @@ def test_writeDynamicParams(wrapper, poolId, staticParamsStoragePointerExtension
         _content3 = staticParamsStoragePointerExtension
     else:
         staticParamsStoragePointer = staticParamsStoragePointerExtension
-    _content0 = (growth << 128) + (integral_0 >> 88)
-    _content1 = ((integral_0 % (1 << 88)) << 168) + (integral_1 >> 48)
-    _content2 = ((integral_1 % (1 << 48)) << 208) + (sharesTotal << 80) + (staticParamsStoragePointer << 64) + logPriceCurrent
-    tx = wrapper._writeDynamicParams(poolId, staticParamsStoragePointerExtension, growth, integral_0, integral_1, sharesTotal, staticParamsStoragePointer, logPriceCurrent)
+
+    _content0 = (staticParamsStoragePointer << (256 - 16)) + (logPriceCurrent << (256 - 16 - 64)) + (sharesTotal << (256 - 16 - 64 - 128)) + (growth >> 80)
+    _content1 = ((growth % (1 << 80)) << (256 - 80)) + (integral_0 >> 40)
+    _content2 = ((integral_0 % (1 << 40)) << (256 - 40)) + integral_1
+
+    tx = wrapper._writeDynamicParams(poolId, staticParamsStoragePointerExtension, staticParamsStoragePointer, logPriceCurrent, sharesTotal, growth, integral_0, integral_1)
     content0, content1, content2, content3 = tx.return_value
     assert content0 == _content0
     assert content1 == _content1

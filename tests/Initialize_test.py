@@ -77,7 +77,7 @@ def test_initialize(deployment, n, request, worker_id):
       {'from': owner}
     )
 
-    staticParamsStoragePointerExtension, growth, integral0, integral1, sharesTotal, staticParamsStoragePointer, logPriceCurrent = access._readDynamicParams(nofeeswap, poolId)
+    staticParamsStoragePointerExtension, staticParamsStoragePointer, logPriceCurrent, sharesTotal, growth, integral0, integral1 = access._readDynamicParams(nofeeswap, poolId)
     curveArray = list(access._readCurve(nofeeswap, poolId, logPriceCurrent).return_value)
     tag0, tag1, sqrtOffset, sqrtInverseOffset, sqrtSpacing, sqrtInverseSpacing = access._readStaticParams0(nofeeswap, poolId, staticParamsStoragePointer)
     outgoingMax, outgoingMaxModularInverse, incomingMax, poolGrowthPortion, maxPoolGrowthPortion, protocolGrowthPortion, pendingKernelLength = access._readStaticParams1(nofeeswap, poolId, staticParamsStoragePointer)

@@ -105,9 +105,11 @@ def test_readPoolData(poolId, kernelLength, kernelPendingLength, curveLength, st
     logPriceCurrent = dynamicContent % (1 << 64)
     logPriceCurrent = 1 if logPriceCurrent == 0 else logPriceCurrent
 
-    content0 = (1 << 128) if (dynamicContent == 0) else dynamicContent
+    content0 = (staticParamsStoragePointer << (256 - 16)) + (logPriceCurrent << (256 - 16 - 64)) + (dynamicContent % (1 << (256 - 16 - 64)))
+    if (content0 % (1 << (256 - 16 - 64)) == 0):
+        content0 += 1
     content1 = dynamicContent
-    content2 = ((dynamicContent << 80) % (1 << 256)) + (staticParamsStoragePointer << 64) + logPriceCurrent
+    content2 = dynamicContent
 
     _curve = [curve >> 192, (curve >> 128) % (1 << 64), (curve >> 64) % (1 << 64), curve % (1 << 64)] * ceiling(curveLength / 4)
     _curve = _curve[0:(curveLength - 1)] + [logPriceCurrent]

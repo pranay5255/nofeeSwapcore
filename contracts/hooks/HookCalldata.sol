@@ -88,12 +88,12 @@ uint16 constant _hookDataByteCountCalldata_ = 1491;
 
 uint16 constant _dynamicParamsCalldata_ = 1493;
 uint16 constant _staticParamsStoragePointerExtensionCalldata_ = 1493;
-uint16 constant _growthCalldata_ = 1525;
-uint16 constant _integral0Calldata_ = 1541;
-uint16 constant _integral1Calldata_ = 1568;
-uint16 constant _sharesTotalCalldata_ = 1595;
-uint16 constant _staticParamsStoragePointerCalldata_ = 1611;
-uint16 constant _logPriceCurrentCalldata_ = 1613;
+uint16 constant _staticParamsStoragePointerCalldata_ = 1525;
+uint16 constant _logPriceCurrentCalldata_ = 1527;
+uint16 constant _sharesTotalCalldata_ = 1535;
+uint16 constant _growthCalldata_ = 1551;
+uint16 constant _integral0Calldata_ = 1567;
+uint16 constant _integral1Calldata_ = 1594;
 
 uint16 constant _deploymentCreationCodeCalldata_ = 1621;
 
