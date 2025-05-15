@@ -1241,63 +1241,58 @@ function readCurve() view returns (Index curveLength) {
   X59 qCurrent = getLogPriceCurrent();
 
   assembly {
-    // The first slot of the curve sequence is read from storage.
-    let value := sload(storageSlot)
-
-    // The first slot of the curve sequence is stored in memory. 
-    mstore(memoryPointer, value)
-
-    // 'memoryPointer' is shifted by 32 bytes in order to refer to the next
-    // slot of the curve sequence.
-    memoryPointer := add(memoryPointer, 32)
-
-    // Initially, the length of the curve sequence is set to '4'.
-    curveLength := 4
+    let value
 
     // The loop is broken whenever we encounter 'qCurrent'.
     for {} 0x1 {} {
-      // The least significant 64 bits of value are derived.
-      let lastMember := and(value, 0xFFFFFFFFFFFFFFFF)
+      value := sload(storageSlot)
 
-      // If 'lastMember' is equal to 'qCurrent', it means that we have
-      // encountered the end of the curve sequence and the loop should be
-      // broken.
-      if eq(lastMember, qCurrent) { break }
-
-      // If 'lastMember' is equal to '0', it means that 'qCurrent' is somewhere
-      // in 'value'.
-      if eq(lastMember, 0) {
-        // The following lines determine the location of 'qCurrent' in 'value'.
-        value := shr(64, value)
-        if eq(and(value, 0xFFFFFFFFFFFFFFFF), qCurrent) {
-          curveLength := sub(curveLength, 1)
-          break
-        }
-        value := shr(64, value)
-        if eq(and(value, 0xFFFFFFFFFFFFFFFF), qCurrent) {
-          curveLength := sub(curveLength, 2)
-          break
-        }
-        curveLength := sub(curveLength, 3)
+      // Examines if the most significant 64 bits are equal to 'qCurrent'.
+      let member := shr(192, value)
+      if eq(member, qCurrent) {
+        curveLength := add(curveLength, 1)
+        value := shl(192, member)
         break
       }
 
-      // 'storageSlot' is incremented.
-      storageSlot := add(storageSlot, 1)
+      // Examines if the second most significant 64 bits are equal to
+      // 'qCurrent'.
+      member := shr(128, value)
+      if eq(and(member, 0xFFFFFFFFFFFFFFFF), qCurrent) {
+        curveLength := add(curveLength, 2)
+        value := shl(128, member)
+        break
+      }
 
-      // The content of the new 'storageSlot' is read from storage.
-      value := sload(storageSlot)
+      // Examines if the third most significant 64 bits are equal to
+      // 'qCurrent'.
+      member := shr(64, value)
+      if eq(and(member, 0xFFFFFFFFFFFFFFFF), qCurrent) {
+        curveLength := add(curveLength, 3)
+        value := shl(64, member)
+        break
+      }
+
+      curveLength := add(curveLength, 4)
+
+      // Examines if the least significant 64 bits are equal to
+      // 'qCurrent'.
+      if eq(and(value, 0xFFFFFFFFFFFFFFFF), qCurrent) {
+        break
+      }
 
       // 'value' is stored in memory.
       mstore(memoryPointer, value)
 
+      // 'storageSlot' is incremented.
+      storageSlot := add(storageSlot, 1)
+
       // 'memoryPointer' is incremented by 32 bytes.
       memoryPointer := add(memoryPointer, 32)
-
-      // 'curveLength' is incremented by 4 and it will be decremented if we
-      // encounter the end of the curve sequence.
-      curveLength := add(curveLength, 4)
     }
+
+    // 'value' is stored in memory.
+    mstore(memoryPointer, value)
   }
 }
 
