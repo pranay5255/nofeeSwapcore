@@ -68,7 +68,7 @@ function readInitializeInput() view returns (KernelCompact kernelCompact) {
   // Calldata layout for 'initialize' is as follows:
   //
   // '0x00': 'INofeeswapDelegatee.initialize.selector'
-  // '0x04': 'poolId'
+  // '0x04': 'unsaltedPoolId'
   // '0x24': 'tag0'
   // '0x44': 'tag1'
   // '0x64': 'poolGrowthPortion'
@@ -100,9 +100,8 @@ function readInitializeInput() view returns (KernelCompact kernelCompact) {
 
     // Verifies whether the pool already exists or not.
     require(
-      // The most significant 128 bits of this slot (dynamic parameter's first 
-      // slot) contains the 'growth' which is always greater than or equal to
-      // 'oneX111' after initialization.
+      // The first slot of dynamic parameters contains the 'logPriceCurrent'
+      // which is always nonzero after initialization.
       readStorage(getDynamicParamsSlot(poolId)) == 0,
       PoolExists(poolId)
     );
