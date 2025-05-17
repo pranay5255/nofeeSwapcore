@@ -1566,6 +1566,7 @@ function readPoolData() view {
 
   // The length of the kernel is determined.
   Index length = readKernelLength(storageAddress);
+  setKernelLength(length);
 
   // Kernel breakpoints are read from the storage contract and stored in
   // memory.
