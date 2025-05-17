@@ -1459,7 +1459,7 @@ function getStaticParamsStorageAddress(
     mstore8(0x34, 0x01)
 
     // Gives the 'storage contract' address.
-    storageAddress := keccak256(0x1e, 0x17)
+    storageAddress := and(keccak256(0x1e, 0x17), shr(96, not(0)))
   }
 }
 
