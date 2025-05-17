@@ -62,8 +62,9 @@ contract TransientWrapper {
     uint256 poolId
   ) public {
     setPoolId(poolId);
-    lockPool();
-    lockPool();
+    uint256 poolLockSlot = getPoolLockSlot();
+    lockPool(poolLockSlot);
+    lockPool(poolLockSlot);
   }
 
   function _lockUnlockPool(
@@ -73,12 +74,13 @@ contract TransientWrapper {
     uint256 content1
   ) {
     setPoolId(poolId);
-    lockPool();
+    uint256 poolLockSlot = getPoolLockSlot();
+    lockPool(poolLockSlot);
     uint256 transientSlot = getPoolLockSlot();
     assembly {
       content0 := tload(transientSlot)
     }
-    unlockPool();
+    unlockPool(poolLockSlot);
     assembly {
       content1 := tload(transientSlot)
     }

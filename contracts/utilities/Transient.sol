@@ -182,10 +182,9 @@ function getPoolLockSlot() pure returns (uint256 transientSlot) {
 }
 
 /// @notice Safeguard against tampering with any pool which is being used.
-function lockPool() {
-  // The transient slot associated with the pool is determined.
-  uint256 transientSlot = getPoolLockSlot();
-
+///
+/// @param transientSlot The transient storage to be checked and populated.
+function lockPool(uint256 transientSlot) {
   // First we check whether the slot is already populated.
   require(readUint256Transient(transientSlot) == 0, PoolIsLocked(getPoolId()));
 
@@ -194,8 +193,10 @@ function lockPool() {
 }
 
 /// @notice Clears the pool lock.
-function unlockPool() {
-  writeTransient(getPoolLockSlot(), uint256(0));
+///
+/// @param transientSlot The transient storage to be cleared.
+function unlockPool(uint256 transientSlot) {
+  writeTransient(transientSlot, uint256(0));
 }
 
 //////////////////////////////////////////////////////////////// nonzeroAmounts

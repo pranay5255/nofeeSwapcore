@@ -63,7 +63,8 @@ import {
   unlockPool,
   updateTransientBalance,
   readRedeployStaticParamsAndKernel,
-  writeRedeployStaticParamsAndKernel
+  writeRedeployStaticParamsAndKernel,
+  getPoolLockSlot
 } from "./utilities/Transient.sol";
 import {
   readGrowthPortions,
@@ -217,11 +218,18 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     // memory pointer is set by this function as well.
     KernelCompact kernelCompact = readInitializeInput();
 
+    // Safeguard against attempting to initialize again via the
+    // 'isPreInitialize' hook.
+    uint256 poolLockSlot = getPoolLockSlot();
+    unchecked {
+      lockPool(poolLockSlot + 1);
+    }
+
     // Pre initialize hook is invoked next.
     if (isPreInitialize()) invokePreInitialize();
 
-    // Safeguard against reentrancy.
-    lockPool();
+    // Safeguard against all other operations except initialize.
+    lockPool(poolLockSlot);
 
     // Validates 'poolId' by verifying flags and the hook address.
     validateFlags();
@@ -269,7 +277,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     writeStorage(getPoolOwnerSlot(getPoolId()), uint256(uint160(msg.sender)));
 
     // The lock is cleared to open the pool for other actions.
-    unlockPool();
+    unlockPool(poolLockSlot);
 
     // Initialize event is emitted next.
     emitInitializeEvent();
@@ -305,7 +313,8 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     }
 
     // Safeguard against reentrancy.
-    lockPool();
+    uint256 poolLockSlot = getPoolLockSlot();
+    lockPool(poolLockSlot);
 
     // Dynamic parameters are read from storage.
     readDynamicParams();
@@ -428,7 +437,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     updateTotalSupply(getPoolId(), qMin, qMax, getShares());
 
     // The lock is cleared to open the pool for other actions.
-    unlockPool();
+    unlockPool(poolLockSlot);
 
     // An event is emitted.
     setPositionAmount0(amount0);
@@ -467,7 +476,8 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     if (isPreDonate()) invokePreDonate();
 
     // Safeguard against reentrancy.
-    lockPool();
+    uint256 poolLockSlot = getPoolLockSlot();
+    lockPool(poolLockSlot);
 
     // Dynamic parameters are read from storage and we check whether pool exists
     readDynamicParams();
@@ -547,7 +557,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     updateTransientBalance(msg.sender, getTag1(), amount1);
 
     // The lock is cleared to open the pool for other actions.
-    unlockPool();
+    unlockPool(poolLockSlot);
 
     // An event is emitted.
     emitDonateEvent();
@@ -579,7 +589,8 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     if (isPreModifyKernel()) invokePreModifyKernel();
 
     // Safeguard against reentrancy.
-    lockPool();
+    uint256 poolLockSlot = getPoolLockSlot();
+    lockPool(poolLockSlot);
 
     // Read dynamic parameters from which we determine whether the pool exists.
     readDynamicParams();
@@ -645,7 +656,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     writeDynamicParams();
 
     // The lock is cleared to open the pool for other actions.
-    unlockPool();
+    unlockPool(poolLockSlot);
 
     // An event is emitted next.
     emitModifyKernelEvent();
@@ -735,7 +746,8 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     );
 
     // Safeguard against reentrancy.
-    lockPool();
+    uint256 poolLockSlot = getPoolLockSlot();
+    lockPool(poolLockSlot);
 
     // Checks the pool owner.
     {
@@ -801,7 +813,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     writeDynamicParams();
 
     // The lock is cleared to open the pool for other actions.
-    unlockPool();
+    unlockPool(poolLockSlot);
 
     // An event is emitted next.
     emitModifyPoolGrowthPortionEvent();
@@ -816,7 +828,8 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     readUpdateGrowthPortionsInput();
 
     // Safeguard against reentrancy.
-    lockPool();
+    uint256 poolLockSlot = getPoolLockSlot();
+    lockPool(poolLockSlot);
 
     // Read dynamic parameters from which we determine whether the pool exists.
     readDynamicParams();
@@ -882,7 +895,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     }
 
     // The lock is cleared to open the pool for other actions.
-    unlockPool();
+    unlockPool(poolLockSlot);
 
     // An event is emitted next.
     emitUpdateGrowthPortionsEvent();
@@ -900,7 +913,8 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     readCollectInput();
 
     // Safeguard against reentrancy.
-    lockPool();
+    uint256 poolLockSlot = getPoolLockSlot();
+    lockPool(poolLockSlot);
 
     // Pool parameters are read from storage.
     readDynamicParams();
@@ -930,7 +944,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     incrementBalance(owner, getTag1(), amount1);
 
     // The lock is cleared to open the pool for other actions.
-    unlockPool();
+    unlockPool(poolLockSlot);
 
     // An event is emitted next.
     emitPoolCollectionEvent(getPoolId(), owner, amount0, amount1);
@@ -948,7 +962,8 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     readCollectInput();
 
     // Safeguard against reentrancy.
-    lockPool();
+    uint256 poolLockSlot = getPoolLockSlot();
+    lockPool(poolLockSlot);
 
     // Pool parameters are read from storage.
     readDynamicParams();
@@ -980,7 +995,7 @@ contract NofeeswapDelegatee is INofeeswapDelegatee {
     incrementBalance(owner, getTag1(), amount1);
 
     // The lock is cleared to open the pool for other actions.
-    unlockPool();
+    unlockPool(poolLockSlot);
 
     // An event is emitted next.
     emitProtocolCollectionEvent(getPoolId(), amount0, amount1);

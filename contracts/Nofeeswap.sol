@@ -64,7 +64,8 @@ import {
   writeReserveValue,
   unlockPool,
   lockPool,
-  transientBalance
+  transientBalance,
+  getPoolLockSlot
 } from "./utilities/Transient.sol";
 import {TokenLibrary} from "./utilities/Token.sol";
 import {PriceLibrary} from "./utilities/Price.sol";
@@ -594,7 +595,8 @@ contract Nofeeswap is INofeeswap, StorageAccess, TransientAccess {
     if (isPreSwap()) invokePreSwap();
 
     // Safeguard against reentrancy.
-    lockPool();
+    uint256 poolLockSlot = getPoolLockSlot();
+    lockPool(poolLockSlot);
     
     // Dynamic parameters, static parameters, kernel, and curve are read next.
     readPoolData();
@@ -615,7 +617,7 @@ contract Nofeeswap is INofeeswap, StorageAccess, TransientAccess {
        ||
       (getAmountSpecified() == zeroX127)
     ) {
-      unlockPool();
+      unlockPool(poolLockSlot);
       return (0, 0);
     }
 
@@ -677,7 +679,7 @@ contract Nofeeswap is INofeeswap, StorageAccess, TransientAccess {
     updateTransientBalance(msg.sender, getTag1(), amount1);
 
     // The lock is cleared to open the pool for other actions.
-    unlockPool();
+    unlockPool(poolLockSlot);
 
     // An event is emitted.
     emitSwapEvent();
